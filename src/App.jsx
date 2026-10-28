@@ -8,7 +8,7 @@ import QuizPage from "./pages/QuizPage";
 import ResultPage from "./pages/ResultPage";
 import LeaderboardPage from "./pages/LeaderBoardpage";
 
-import { LEVEL_DATA, MAX_STARS, PASS_THRESHOLD } from "./data/levelData";
+import { LEVEL_DATA, MAX_STARS, PASS_THRESHOLD, GENIALLY_HOME } from "./data/levelData";
 import {
   getSavedName,
   saveName,
@@ -19,6 +19,7 @@ import {
   markLeaderboardSubmitted,
 } from "./utils/storage";
 import { submitScore } from "./utils/Leaderboardapi";
+import { shuffleQuestions } from "./utils/shuffle";
 import sfxCorrect from "./assets/BENAR.mp3";
 import sfxWrong from "./assets/SALAH.mp3";
 
@@ -48,9 +49,7 @@ let audioUnlocked = false;
 
 // Sekali dipanggil (dari dalam event klik asli, misalnya submit form
 // nama), ini "membuka kunci" izin autoplay audio untuk SISA sesi
-// halaman ini. Setelah ini, audio.play() di halaman Materi (lewat
-// useEffect, bukan klik langsung) jadi jauh lebih andal berhasil,
-// terutama di Safari yang paling ketat soal autoplay.
+// halaman ini.
 function unlockAudioForSession() {
   if (audioUnlocked) return;
   audioUnlocked = true;
@@ -70,6 +69,9 @@ export default function App() {
   const [progress, setProgress] = useState(() => getSavedProgress(LEVEL_DATA.length));
 
   const [activeLevel, setActiveLevel] = useState(0);
+  // Soal-soal level yang sedang dikerjakan, dengan urutan opsi yang sudah
+  // diacak. Diisi ulang tiap kuis dimulai (termasuk saat Ulangi).
+  const [activeQuestions, setActiveQuestions] = useState([]);
   const [qIndex, setQIndex] = useState(0);
   const [starCount, setStarCount] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -104,6 +106,8 @@ export default function App() {
   }
 
   function startQuiz() {
+    // acak urutan opsi tiap soal (correct otomatis dipetakan ulang)
+    setActiveQuestions(shuffleQuestions(LEVEL_DATA[activeLevel].questions));
     setQIndex(0);
     setStarCount(0);
     setSelectedOptions([]);
@@ -127,7 +131,7 @@ export default function App() {
   function submitAnswer() {
     const pickCount = LEVEL_DATA[activeLevel].pickCount;
     if (answered || selectedOptions.length !== pickCount) return;
-    const q = LEVEL_DATA[activeLevel].questions[qIndex];
+    const q = activeQuestions[qIndex];
     const chosenSorted = [...selectedOptions].sort();
     const correctSorted = [...q.correct].sort();
     const isCorrect =
@@ -143,7 +147,7 @@ export default function App() {
   }
 
   function nextQuestion() {
-    const total = LEVEL_DATA[activeLevel].questions.length;
+    const total = activeQuestions.length;
     if (qIndex + 1 < total) {
       setQIndex(qIndex + 1);
       setSelectedOptions([]);
@@ -189,6 +193,9 @@ export default function App() {
           isUnlocked={isUnlocked}
           onOpenLevel={openLevel}
           onLeaderboard={() => setScreen("leaderboard")}
+          onHome={() => {
+  window.location.href = GENIALLY_HOME;
+}}
         />
       )}
 
@@ -198,7 +205,7 @@ export default function App() {
 
       {screen === "quiz" && (
         <QuizPage
-          level={LEVEL_DATA[activeLevel]}
+          level={{ ...LEVEL_DATA[activeLevel], questions: activeQuestions }}
           qIndex={qIndex}
           starCount={starCount}
           selectedOptions={selectedOptions}

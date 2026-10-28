@@ -111,15 +111,13 @@ export const LEVEL_DATA = [
         // FV anuitas biasa = 10.000.000 x [((1.08)^5 - 1)/0.08] ≈ Rp 58.666.000
         question:
           "Alya menyisihkan Rp10.000.000 setiap akhir tahun ke dalam rekening investasi dengan bunga 8% per tahun. Ia melakukan setoran selama 5 tahun. Berapakah nilai masa depan investasi Alya?",
-        options: ["Rp50.000.000", "Rp52.000.000", "Rp55.600.000", "Rp58.700.000", "Rp60.800.000 "],
+        options: ["Rp50.000.000", "Rp52.000.000", "Rp55.600.000", "Rp58.750.000", "Rp60.800.000 "],
         correct: [3],
       },
       {
-        // TODO (Irfan): tolong verifikasi ulang - hasil hitunganku ≈ Rp941.500,
-        // tidak cocok persis ke opsi manapun. Aku pilih Rp983.469 sementara.
         question:
           "Budi membeli sebuah laptop seharga Rp20.000.000 melalui sistem kredit. Pinjaman dikenakan bunga 12% per tahun dan akan dilunasi dalam 24 kali pembayaran bulanan. Berapakah besar pembayaran anuitas Budi setiap bulan?",
-        options: ["Rp800.000", "Rp850.000", "Rp900.000", "Rp983.469", "Rp1.000.000"],
+        options: ["Rp800.000", "Rp850.000", "Rp900.000", "Rp983.469", "Rp960.000"],
         correct: [4],
       },
     ],
@@ -175,3 +173,4 @@ export const LEVEL_DATA = [
 // Ganti URL ini sesuai kebutuhan link Genially kamu
 export const GENIALLY_URL = "https://view.genially.com/6a881c18fa2dd78b41d19fa5";
 export const GENIALLY_MAP_URL = "https://view.genially.com/6a881c18fa2dd78b41d19fa5";
+export const GENIALLY_HOME = "https://view.genially.com/6a73f94f54076ea3a8962983";

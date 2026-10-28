@@ -7,6 +7,7 @@ import villageBadge1 from "../assets/Village1.png";
 import villageBadge2 from "../assets/Village2.png";
 import villageBadge3 from "../assets/Village3.png";
 
+
 // Pemetaan id level -> gambar badge-nya. Ganti path import di atas
 // sesuai nama file icon kamu kalau berbeda.
 const BADGES = {
