@@ -22,6 +22,8 @@ import { submitScore } from "./utils/Leaderboardapi";
 import { shuffleQuestions } from "./utils/shuffle";
 import sfxCorrect from "./assets/BENAR.mp3";
 import sfxWrong from "./assets/SALAH.mp3";
+import useBackgroundMusic from "./utils/useBackgroundMusic";
+import bgm from "./assets/SoundGame.mp3";
 
 // Diputar ulang dari awal tiap kali dipanggil, jadi aman kalau
 // pemain jawab soal berturut-turut dengan cepat.
@@ -65,6 +67,7 @@ export default function App() {
   // Nggak ada lagi halaman Home: begitu app dibuka, langsung diputuskan
   // mau ke "name" (belum pernah isi nama) atau "map" (sudah pernah).
   const [screen, setScreen] = useState(() => (getSavedName() ? "map" : "name"));
+  useBackgroundMusic(bgm, screen === "name" || screen === "map");
   const [playerName, setPlayerName] = useState(() => getSavedName());
   const [progress, setProgress] = useState(() => getSavedProgress(LEVEL_DATA.length));
 
