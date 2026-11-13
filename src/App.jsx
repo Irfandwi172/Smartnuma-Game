@@ -17,6 +17,8 @@ import {
   getOrSetStartTime,
   hasSubmittedLeaderboard,
   markLeaderboardSubmitted,
+  hasSeenNarration,
+  markNarrationSeen,
 } from "./utils/storage";
 import { submitScore } from "./utils/Leaderboardapi";
 import { shuffleQuestions } from "./utils/shuffle";
@@ -79,6 +81,16 @@ export default function App() {
   const [starCount, setStarCount] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [answered, setAnswered] = useState(false);
+
+  // Narasi di tengah peta: tampil di peta (otomatis setelah mengisi nama)
+  // sampai pemain menutupnya lewat ikon X. Setelah ditutup, statusnya
+  // disimpan di localStorage jadi tidak muncul lagi.
+  const [showNarration, setShowNarration] = useState(() => !hasSeenNarration());
+
+  function closeNarration() {
+    setShowNarration(false);
+    markNarrationSeen();
+  }
 
   // simpan progres tiap kali berubah
   useEffect(() => {
@@ -156,27 +168,35 @@ export default function App() {
       setSelectedOptions([]);
       setAnswered(false);
     } else {
-      setProgress((p) => {
-        const copy = [...p];
-        copy[activeLevel] = Math.max(copy[activeLevel], starCount);
-        return copy;
-      });
-
-      // kalau ini level terakhir dan lulus, kirim skor ke leaderboard
-      const isLastLevel = activeLevel === LEVEL_DATA.length - 1;
-      const passedThisLevel = starCount >= PASS_THRESHOLD;
-      if (isLastLevel && passedThisLevel && !hasSubmittedLeaderboard()) {
-        const finalProgress = [...progress];
-        finalProgress[activeLevel] = Math.max(finalProgress[activeLevel], starCount);
-        const totalBintang = finalProgress.reduce((a, b) => a + b, 0);
-        const startTime = getOrSetStartTime();
-        const waktuDetik = Math.max(1, Math.round((Date.now() - startTime) / 1000));
-        submitScore({ nama: playerName || "Tanpa Nama", bintang: totalBintang, waktu: waktuDetik });
-        markLeaderboardSubmitted();
-      }
-
-      setScreen("result");
+      finishLevel(starCount);
     }
+  }
+
+  // Menyelesaikan level dengan jumlah bintang akhir `stars`.
+  // Dipanggil dari nextQuestion (kuis biasa) dan langsung dari Village 3
+  // (soal bertahap: bintangnya dihitung di komponen Village 3 sendiri).
+  function finishLevel(stars) {
+    setStarCount(stars);
+    setProgress((p) => {
+      const copy = [...p];
+      copy[activeLevel] = Math.max(copy[activeLevel], stars);
+      return copy;
+    });
+
+    // kalau ini level terakhir dan lulus, kirim skor ke leaderboard
+    const isLastLevel = activeLevel === LEVEL_DATA.length - 1;
+    const passedThisLevel = stars >= PASS_THRESHOLD;
+    if (isLastLevel && passedThisLevel && !hasSubmittedLeaderboard()) {
+      const finalProgress = [...progress];
+      finalProgress[activeLevel] = Math.max(finalProgress[activeLevel], stars);
+      const totalBintang = finalProgress.reduce((a, b) => a + b, 0);
+      const startTime = getOrSetStartTime();
+      const waktuDetik = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+      submitScore({ nama: playerName || "Tanpa Nama", bintang: totalBintang, waktu: waktuDetik });
+      markLeaderboardSubmitted();
+    }
+
+    setScreen("result");
   }
 
   function backToMap() {
@@ -196,6 +216,8 @@ export default function App() {
           isUnlocked={isUnlocked}
           onOpenLevel={openLevel}
           onLeaderboard={() => setScreen("leaderboard")}
+          showNarration={showNarration}
+          onCloseNarration={closeNarration}
           onHome={() => {
   window.location.href = GENIALLY_HOME;
 }}
@@ -216,6 +238,8 @@ export default function App() {
           onToggleOption={toggleOption}
           onSubmit={submitAnswer}
           onNext={nextQuestion}
+          onFinish={finishLevel}
+          onSfx={(isCorrect) => playSfx(isCorrect ? sfxCorrect : sfxWrong)}
           onBack={backToMap}
         />
       )}
@@ -223,6 +247,7 @@ export default function App() {
       {screen === "result" && (
         <ResultPage
           starCount={starCount}
+          totalStars={progress.reduce((a, b) => a + b, 0)}
           passed={starCount >= PASS_THRESHOLD}
           isLast={activeLevel === LEVEL_DATA.length - 1}
           activeLevel={activeLevel}

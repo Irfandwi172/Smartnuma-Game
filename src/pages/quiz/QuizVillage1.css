@@ -1,0 +1,311 @@
+/* ===== VILLAGE 1 — mengikuti desain 1126 x 637 px =====
+
+   Cara kerja ukuran:
+   - Posisi/ukuran kotak ditulis dalam % dari papan (x/1126, y/637).
+   - Teks, jarak, dan lengkung sudut memakai satuan "cqw" (1cqw = 1% lebar papan),
+     jadi semuanya ikut mengecil/membesar proporsional dengan gambar.
+   - aspect-ratio papan HARUS sama dengan rasio asli kuis1fix.png. Kalau gambarmu
+     bukan 1126 x 637, ganti angka di bawah, kalau tidak posisi kotak akan geser. */
+
+.v1-scene {
+  background: linear-gradient(180deg, var(--color-sky-top) 0%, var(--color-sky-mid) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.v1-board {
+  position: relative;
+  width: 100%;
+  max-width: 1700px;
+  aspect-ratio: 990 / 637;
+  container-type: inline-size; /* mengaktifkan satuan cqw untuk anak-anaknya */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.v1-back {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+.v1-back .back-btn {
+  position: static; /* .back-btn bawaan layout.css bersifat absolute */
+}
+
+.v1-progress {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+}
+
+/* ---------- Petunjuk / hasil jawaban (di atas kotak pernyataan) ---------- */
+.v1-status {
+  position: absolute;
+  left: 33.57%;
+  top: 18.5%;
+  width: 52.4%;
+  height: 6.6%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.v1-hint {
+  font-size: 1.2cqw;
+  color: var(--color-ink-soft);
+  text-align: center;
+}
+
+.v1-notice {
+  font-size: 1.2cqw;
+  font-weight: 700;
+  color: var(--color-wrong-border);
+  text-align: center;
+}
+
+.v1-feedback {
+  font-weight: 800;
+  font-size: 1.5cqw;
+  text-align: center;
+}
+.v1-feedback--correct {
+  color: var(--color-correct-border);
+}
+.v1-feedback--wrong {
+  color: var(--color-wrong-border);
+}
+
+/* ---------- Kotak SOAL (kiri): x172 y172, 162 x 303 ---------- */
+.v1-content {
+  position: absolute;
+  left: 8.27%;
+  top: 27%;
+  width: 25.39%;
+  height: 47.57%;
+  padding: 0.9cqw;
+  border-radius: 0.89cqw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.v1-question {
+  color: var(--color-ink);
+  font-size: 1.05cqw;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.v1-question-image {
+  width: 120%;
+  height: auto;
+  display: block;
+  margin: 0;
+  border-radius: 0.5cqw;
+}
+
+/* ---------- Kotak PERNYATAAN (kanan atas) ----------
+   Area: x378 y172, 590 x 176. Tiap kotak 290 x 69,
+   jarak antar kolom 10px, jarak antar baris 38px. */
+.v1-options {
+  position: absolute;
+  left: 38.57%;
+  top: 27%;
+  width: 52.4%;
+  height: 27.63%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 3.38cqw 0.89cqw;
+}
+
+.v1-option {
+  display: flex;
+  align-items: center;
+  gap: 1.6cqw;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0 0.9cqw 0 0.89cqw;
+  border-radius: 0.89cqw;
+  border: 2px solid var(--color-parchment-border);
+  background: #fff;
+  text-align: left;
+  color: var(--color-ink);
+  font-size: 0.95cqw;
+  line-height: 1.2;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.v1-option:disabled {
+  cursor: default;
+}
+
+/* Lingkaran biru huruf (desain: ~43 px) */
+.v1-option-letter {
+  flex-shrink: 0;
+  width: 3.82cqw;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: var(--color-blue-2);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.6cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none; /* supaya geser jari di sini jadi drag, bukan scroll halaman */
+}
+
+.v1-option-text {
+  flex: 1;
+  min-height: 0;
+  max-height: 100%;
+}
+
+/* Status opsi: idle | selected | correct | wrong */
+.v1-option--selected {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 2px rgba(224, 168, 64, 0.4);
+}
+.v1-option--correct {
+  background: var(--color-correct-bg);
+  border-color: var(--color-correct-border);
+}
+.v1-option--correct .v1-option-letter {
+  background: var(--color-correct-border);
+}
+.v1-option--wrong {
+  background: var(--color-wrong-bg);
+  border-color: var(--color-wrong-border);
+}
+.v1-option--wrong .v1-option-letter {
+  background: var(--color-wrong-border);
+}
+
+/* ---------- Kotak SESUAI / TIDAK SESUAI ----------
+   Area: x406 y385, 483 x 127. Tiap kotak ~218 px, jarak antar kotak 46px. */
+.v1-zones {
+  position: absolute;
+  left: 43.06%;
+  top: 60.44%;
+  width: 42.9%;
+  height: 19.94%;
+  display: flex;
+  gap: 4.09cqw;
+}
+
+.v1-zone {
+  position: relative;
+  flex: 1;
+  background: #fff;
+  border: 2px solid var(--color-parchment-border);
+  border-radius: 1.78cqw;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.v1-zone--target {
+  border-style: dashed; /* petunjuk: ketuk kotak ini untuk menaruh pernyataan yang diangkat */
+  cursor: pointer;
+}
+.v1-zone--hover {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 0.4cqw rgba(224, 168, 64, 0.45);
+}
+/* Lencana menempel di tengah tepi atas kotak */
+.v1-zone-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: auto;
+  pointer-events: none;
+}
+.v1-zone-badge--correct {
+  width: 12.43cqw; /* desain: 140 px */
+}
+.v1-zone-badge--wrong {
+  width: 11.9cqw; /* desain: 134 px */
+}
+.v1-zone-chips {
+  position: absolute;
+  inset: 0;
+  padding: 3.2cqw 0.9cqw 0.9cqw; /* atas lebih lega supaya tidak tertutup lencana */
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+  gap: 0.7cqw;
+}
+ 
+.v1-chip {
+  width: 3.4cqw;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-blue-2);
+  color: #fff;
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.5cqw;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.v1-chip:disabled {
+  cursor: default;
+}
+.v1-chip--dragging {
+  opacity: 0.4;
+}
+.v1-chip--correct {
+  background: var(--color-correct-border);
+}
+.v1-chip--wrong {
+  background: var(--color-wrong-border);
+}
+ 
+/* Bayangan yang mengikuti pointer (dirender di document.body lewat portal,
+   jadi pakai px, bukan cqw) */
+.v1-ghost {
+  position: fixed;
+  z-index: 1000;
+  width: 42px;
+  height: 42px;
+  margin: -21px 0 0 -21px;
+  border-radius: 50%;
+  background: var(--color-blue-2);
+  color: #fff;
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  user-select: none;
+}
+/* ---------- Tombol Jawab / Lanjut (di bawah kotak sesuai/tidak sesuai) ---------- */
+.v1-actions {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 82.2%;
+  display: flex;
+  justify-content: center;
+}
+.v1-actions .btn-primary {
+  font-size: 1.4cqw;
+  padding: 0.7cqw 2.6cqw;
+  transition: background-color 0.2s ease-in-out;
+}
+.v1-actions .btn-primary:hover {
+  background: var(--color-gold);
+}

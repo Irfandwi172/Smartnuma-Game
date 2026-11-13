@@ -8,13 +8,23 @@ function shuffleArray(arr) {
   return copy;
 }
 
+// Acak urutan opsi satu soal/part pilihan ganda (correct ikut dipetakan ulang)
+function shuffleChoice(q) {
+  const order = shuffleArray(q.options.map((_, i) => i)); // urutan index baru
+  return {
+    ...q,
+    options: order.map((oldIdx) => q.options[oldIdx]),
+    correct: q.correct.map((oldIdx) => order.indexOf(oldIdx)),
+  };
+}
+
 export function shuffleQuestions(questions) {
   return questions.map((q) => {
-    const order = shuffleArray(q.options.map((_, i) => i)); // urutan index baru
-    return {
-      ...q,
-      options: order.map((oldIdx) => q.options[oldIdx]),
-      correct: q.correct.map((oldIdx) => order.indexOf(oldIdx)),
-    };
+    // Soal bertahap (village 3): acak opsi hanya pada part pilihan ganda,
+    // part lain (mis. jawaban ketik) dibiarkan apa adanya.
+    if (q.parts) {
+      return { ...q, parts: q.parts.map((p) => (p.options ? shuffleChoice(p) : p)) };
+    }
+    return shuffleChoice(q);
   });
 }

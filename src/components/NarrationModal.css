@@ -1,0 +1,86 @@
+/* Lapisan gelap tipis yang menutupi seluruh area peta, kartu narasi di tengahnya */
+.narration-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4%;
+  background: rgba(13, 59, 62, 0.35);
+  animation: narration-fade 0.25s ease-out;
+}
+
+/* Memakai gaya .parchment-card dari layout.css; di sini hanya penyesuaian */
+.narration-card {
+  max-height: 100%;
+  animation: narration-pop 0.3s ease-out;
+}
+
+.narration-body {
+  max-height: 55vh;
+  overflow-y: auto; /* kalau narasinya panjang, bisa di-scroll di dalam kotak */
+}
+
+.narration-text {
+  text-align: left;
+  margin: 0 0 12px;
+}
+.narration-text:last-child {
+  margin-bottom: 0;
+}
+
+/* Ikon tutup: menempel di sudut kanan atas kotak narasi */
+.narration-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 3px solid var(--color-parchment);
+  background: var(--color-wrong-border);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25), 0 6px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.narration-close:hover {
+  transform: scale(1.1);
+}
+.narration-close:active {
+  transform: scale(0.95);
+}
+.narration-close:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+@keyframes narration-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes narration-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .narration-overlay,
+  .narration-card {
+    animation: none;
+  }
+}

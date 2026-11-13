@@ -1,5 +1,6 @@
 import React from "react";
 import BackButton from "../components/BackButton";
+import NarrationModal from "../components/NarrationModal";
 import { LEVEL_DATA, MAX_STARS } from "../data/levelData";
 import "./MapPage.css";
 import bgMap from "../assets/bg_map.png";
@@ -16,7 +17,16 @@ const BADGES = {
   3: villageBadge3,
 };
 
-export default function MapPage({ playerName, progress, isUnlocked, onOpenLevel, onHome, onLeaderboard }) {
+export default function MapPage({
+  playerName,
+  progress,
+  isUnlocked,
+  onOpenLevel,
+  onHome,
+  onLeaderboard,
+  showNarration,
+  onCloseNarration,
+}) {
   const totalStars = progress.reduce((a, b) => a + b, 0);
 
   return (
@@ -60,6 +70,9 @@ export default function MapPage({ playerName, progress, isUnlocked, onOpenLevel,
             </button>
           );
         })}
+
+        {/* Narasi di tengah peta (menutupi tombol level sampai ditutup) */}
+        {showNarration && <NarrationModal onClose={onCloseNarration} />}
       </div>
     </div>
   );

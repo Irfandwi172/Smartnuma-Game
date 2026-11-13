@@ -1,0 +1,17 @@
+/* Tampilan pil progres (bentuk saja). Posisi absolute-nya ditaruh di CSS
+   tiap village, misalnya .v1-progress { position: absolute; top: 5%; right: 5%; } */
+.quiz-progress-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(243, 233, 210, 0.9);
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: clamp(9px, 1.4vw, 15px);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+.quiz-progress-stars {
+  font-size: clamp(8px, 1.2vw, 13px);
+}

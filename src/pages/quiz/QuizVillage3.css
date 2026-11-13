@@ -1,0 +1,298 @@
+/* ===== VILLAGE 3 — mengikuti desain 855 x 482 px =====
+
+   Cara kerja ukuran:
+   - Posisi kotak ditulis dalam % dari papan (x/855, y/482).
+   - Jarak, teks, dan sudut membulat memakai "cqw" (1cqw = 1% lebar papan),
+     jadi semuanya ikut membesar/mengecil bersama gambar.
+   - aspect-ratio papan HARUS sama dengan rasio asli kuis3.png. Kalau gambarmu
+     bukan 855 x 482, ganti angka di bawah, kalau tidak posisi kotak akan geser. */
+
+.v3-scene {
+  background: linear-gradient(180deg, var(--color-sky-top) 0%, var(--color-sky-mid) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.v3-board {
+  position: relative;
+  width: 100%;
+  max-width: 1700px;
+  aspect-ratio: 760 / 482;
+  container-type: inline-size;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.v3-back {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+.v3-back .back-btn {
+  position: static; /* .back-btn bawaan layout.css bersifat absolute */
+}
+
+.v3-progress {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+}
+
+/* ---------- Kotak soal (kiri atas): x129 y113, 317 x 165 ---------- */
+.v3-content {
+  position: absolute;
+  left: 9.09%;
+  top: 20.44%;
+  width: 37.08%;
+  height: 47.2%;
+  padding: 1.2cqw 1.6cqw;
+  background: #fff;
+  border: 2px solid var(--color-parchment-border);
+  border-radius: 0.9cqw;
+  overflow-y: auto; /* kalau soal + poster lebih tinggi dari kotak */
+  scrollbar-width: thin;
+}
+
+.v3-question {
+  margin: 0 0 0.8cqw;
+  color: var(--color-ink);
+  font-size: 1.1cqw;
+  text-align: justify;
+}
+
+.v3-question-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 0.5cqw;
+}
+
+/* ---------- Pertanyaan 1: 4 pernyataan, grid 2 x 2 ----------
+   Area: x467 y117, 268 x 137. Tiap kotak 128 x ~62, jarak 12px. */
+.v3-options {
+  position: absolute;
+  left: 47.62%;
+  top: 21.27%;
+  width: 44.35%;
+  height: 36.42%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1.4cqw;
+}
+
+.v3-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0.6cqw 0.8cqw;
+  background: #fff;
+  border: 2px solid var(--color-parchment-border);
+  border-radius: 0.9cqw;
+  color: var(--color-ink);
+  font-size: max(9px, 1.05cqw);
+  line-height: 1.2;
+  text-align: center;
+}
+.v3-option:disabled {
+  cursor: default;
+}
+
+/* Huruf kecil di pojok kiri atas supaya A/B/C/D tetap terlihat */
+.v3-option-letter {
+  position: absolute;
+  top: -0.7cqw;
+  left: -0.7cqw;
+  width: 2cqw;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: var(--color-blue-2);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.1cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.v3-option-text {
+  max-height: 100%;
+  overflow-y: auto; /* pernyataan panjang tetap bisa dibaca (atau arahkan kursor: ada tooltip) */
+  scrollbar-width: thin;
+}
+
+.v3-option--selected {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 2px rgba(224, 168, 64, 0.4);
+}
+.v3-option--correct {
+  background: var(--color-correct-bg);
+  border-color: var(--color-correct-border);
+}
+.v3-option--correct .v3-option-letter {
+  background: var(--color-correct-border);
+}
+.v3-option--wrong {
+  background: var(--color-wrong-bg);
+  border-color: var(--color-wrong-border);
+}
+.v3-option--wrong .v3-option-letter {
+  background: var(--color-wrong-border);
+}
+
+/* ---------- Tombol & hasil (dipakai bersama) ---------- */
+.v3-btn {
+  margin-top: 2.5rem;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  justify-content: center;
+  font-size: 1.6cqw;
+}
+
+.v3-feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-weight: 800;
+  font-size: 1.5cqw;
+  line-height: 1.2;
+  text-align: center;
+}
+.v3-feedback small {
+  font-size: 1.15cqw;
+  font-weight: 700;
+}
+.v3-feedback--correct {
+  color: var(--color-correct-border);
+}
+.v3-feedback--wrong {
+  color: var(--color-wrong-border);
+}
+
+/* Tombol Jawab: x562 y264, 84 x 37. Hasilnya dibuat lebih lebar (160px)
+   dan tetap sejajar di tengah tombol. */
+.v3-choice-action {
+  position: absolute;
+  left: 65.73%;
+  top: 54.77%;
+  width: 9.82%;
+  height: 7.68%;
+}
+.v3-choice-action .v3-feedback {
+  position: absolute;
+  left: -4.45cqw;
+  width: 18.71cqw;
+}
+
+/* ---------- Pertanyaan 2 & 3: jawaban diketik ----------
+   Tiap grup: label (y309), kolom isian (y336, 220 x 37), tombol Kirim (y381, 84 x 36).
+   Grup kiri x144, grup kanan x384. Ukuran vertikal dalam cqw. */
+.v3-num {
+  position: absolute;
+  top: 69.11%;
+  width: 25.73%;
+  height: 12.63cqw;
+}
+.v3-num--0 {
+  left: 22.84%;
+}
+.v3-num--1 {
+  left: 51.91%;
+}
+
+.v3-num-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 2.8cqw;
+  display: flex;
+  align-items: center;
+  color: var(--color-ink);
+  font-size: 1.75cqw;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.v3-num-label--invalid {
+  color: var(--color-wrong-border);
+  font-weight: 700;
+}
+
+.v3-input {
+  position: absolute;
+  left: 0;
+  top: 3.16cqw;
+  width: 100%;
+  height: 4.33cqw;
+  padding: 0 1.1cqw;
+  background: #fff;
+  border: 2px solid var(--color-parchment-border);
+  border-radius: 0.9cqw;
+  color: var(--color-ink);
+  font-size: 1.7cqw;
+}
+.v3-input::placeholder {
+  color: #8a7d62;
+}
+.v3-input:focus {
+  outline: none;
+  border-color: var(--color-blue-2);
+}
+.v3-input:disabled {
+  opacity: 1;
+}
+.v3-input--invalid {
+  border-color: var(--color-wrong-border);
+}
+.v3-input--correct {
+  background: var(--color-correct-bg);
+  border-color: var(--color-correct-border);
+}
+.v3-input--wrong {
+  background: var(--color-wrong-bg);
+  border-color: var(--color-wrong-border);
+}
+
+/* Tombol Kirim: 76px dari kiri grup (mengikuti desain). Hasilnya dibuat 200px
+   dan ditengahkan di atas posisi tombol. */
+.v3-num-send {
+  position: absolute;
+  left: 8.89cqw;
+  top: 5.42cqw;
+  width: 9.82cqw;
+  height: 4.21cqw;
+}
+.v3-num-feedback {
+  position: absolute;
+  left: 2.1cqw;
+  top: 8.42cqw;
+  width: 23.4cqw;
+  height: 4.21cqw;
+}
+
+/* ---------- Lihat Hasil: di celah antara dua tombol Kirim (x303-460, y381) ---------- */
+.v3-finish {
+  position: absolute;
+  left: 35.44%;
+  top: 79.05%;
+  width: 18.36%;
+  height: 7.47%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.v3-finish .v3-btn {
+  width: 80%;
+}

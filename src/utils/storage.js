@@ -13,6 +13,7 @@ const NAME_KEY = "pb_player_name";
 const PROGRESS_KEY = "pb_progress";
 const START_TIME_KEY = "pb_start_time";
 const SUBMITTED_KEY = "pb_leaderboard_submitted";
+const NARRATION_KEY = "pb_narration_seen";
 
 export function getSavedName() {
   try {
@@ -56,6 +57,7 @@ export function clearSavedData() {
     localStorage.removeItem(PROGRESS_KEY);
     localStorage.removeItem(START_TIME_KEY);
     localStorage.removeItem(SUBMITTED_KEY);
+    localStorage.removeItem(NARRATION_KEY);
   } catch {
     /* abaikan */
   }
@@ -82,6 +84,23 @@ export function hasSubmittedLeaderboard() {
     return localStorage.getItem(SUBMITTED_KEY) === "1";
   } catch {
     return false;
+  }
+}
+
+// Narasi di peta: tampil sampai pemain menutupnya sekali, setelah itu tidak muncul lagi
+export function hasSeenNarration() {
+  try {
+    return localStorage.getItem(NARRATION_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function markNarrationSeen() {
+  try {
+    localStorage.setItem(NARRATION_KEY, "1");
+  } catch {
+    /* abaikan */
   }
 }
 
