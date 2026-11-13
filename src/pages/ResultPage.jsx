@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { LEVEL_DATA, MAX_STARS, PASS_THRESHOLD } from "../data/levelData";
-import { getTrophy } from "../data/trophies";
+import { getTrophy } from "../data/Trophies";
 import "./ResultPage.css";
 import bgResult from "../assets/bgmateri.png";
 import ulangi from "../assets/retrybutton.png";
