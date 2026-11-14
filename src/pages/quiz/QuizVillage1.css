@@ -97,6 +97,9 @@
   font-size: 1.05cqw;
   line-height: 1.35;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-left: 5rem;
 }
 
 .v1-question-image {
@@ -104,6 +107,7 @@
   height: auto;
   display: block;
   margin: 0;
+  padding: 10px
   border-radius: 0.5cqw;
 }
 

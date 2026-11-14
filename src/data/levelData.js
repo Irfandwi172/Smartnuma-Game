@@ -28,9 +28,9 @@ import bg3 from "../assets/bgpage3.png";
 import bgmateri1 from "../assets/bgmateri.png";
 import bgmateri2 from "../assets/bgmateri2.png";
 import bgmateri3 from "../assets/bgmateri3.png";
-import soal1 from "../assets/VillSoal1.png";
-import soal2 from "../assets/gambar 2.png";
-import soal3 from "../assets/gambar3.png";
+import soal1 from "../assets/SoalVill1.png";
+import soal2 from "../assets/SoalVill2.png";
+import soal3 from "../assets/SoalVill3.png";
 import soal4 from "../assets/Soal_vilage_3.png";
 import audio1 from "../assets/audio1.mp3";
 import audio2 from "../assets/audio2.mp3";
@@ -60,7 +60,7 @@ export const LEVEL_DATA = [
       audio: audio1,
     },
     questions: [
-      {
+      { questionT: "Perhatikan tabel perkembangan investasi berikut.",
         question:
           "Berdasarkan tabel perkembangan investasi yang ditampilkan, pilih 2 pernyataan yang sesuai dengan informasi tersebut!",
         image: soal1,
@@ -72,23 +72,24 @@ export const LEVEL_DATA = [
         ],
         correct: [0, 1],
       },
-      { image: soal2,
+      { questionT : "Perhatikan gambar brosur berikut.",
+        image: soal2,
         question: "Berdasarkan brosur tersebut, pilih 2 pernyataan yang sesuai!",
         options: [
-          "Untuk menentukan nilai akhir investasi, informasi mengenai waktu pembayaran tidak diperlukan selama besar setoran dan suku bunga telah diketahui.",
           "Nilai akhir investasi dipengaruhi oleh besar setoran setiap periode, tingkat bunga, dan jumlah periode investasi.",
           "Karena jumlah setoran setiap tahun sama, bunga yang diperoleh pada setiap periode juga pasti sama.",
           "Produk tersebut termasuk anuitas terutang karena investor melakukan pembayaran secara berkala selama lima tahun.",
+          "Produk tersebut termasuk anuitas biasa karena setoran investasi dilakukan pada akhir setiap periode.",
         ],
         correct: [0, 3],
       },
       { image: soal3,
-        question: "Berdasarkan diagram tersebut, pilih 2 pernyataan yang paling tepat!",
+        question: "Berdasarkan diagram tersebut, pilih 2 pernyataan yang sesuai!",
         options: [
-          "Bunga pada setiap bulan tetap sebesar Rp150.000 karena tingkat bunga pinjaman tidak berubah selama masa pinjaman.",
           "Jumlah bunga tidak dipengaruhi oleh sisa pokok karena bunga ditentukan hanya berdasarkan jumlah pinjaman awal.",
           "Besarnya bunga semakin menurun karena bunga dihitung berdasarkan sisa pokok pinjaman yang semakin kecil setelah angsuran pokok dibayarkan.",
           "Angsuran pokok semakin kecil setiap bulan karena tabel menunjukkan bahwa sisa pinjaman juga semakin kecil.",
+          "Hubungan antara sisa pokok dan bunga menunjukkan bahwa ketika sisa pokok berkurang, jumlah bunga pada periode berikutnya juga berkurang.",
         ],
         correct: [1, 3],
       },

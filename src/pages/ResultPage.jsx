@@ -78,7 +78,7 @@ export default function ResultPage({
                 ⭐ {totalStars} / {maxTotalStars} bintang
               </div>
               <button className="gh-btn gh-body btn-secondary result-trophy-btn" onClick={onLeaderboard}>
-                <span>🏆 LEADERBOARD</span>
+                <span>🏆 DAPATKAN TROPHY</span>
               </button>
             </div>
           ) : (

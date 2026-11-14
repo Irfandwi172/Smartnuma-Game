@@ -159,7 +159,7 @@ export default function QuizVillage1(props) {
   const remaining = pickCount - selectedOptions.length;
   const hint =
     remaining > 0
-      ? `Seret ${remaining} pernyataan yang sesuai ke kotak SESUAI.`
+      ? `Geser ${remaining} pernyataan yang sesuai ke kotak SESUAI.`
       : `Kotak SESUAI sudah berisi ${pickCount} pernyataan. Tekan Jawab!`;
 
   function renderZone(zone, label, badgeSrc) {
@@ -216,8 +216,9 @@ export default function QuizVillage1(props) {
 
         {/* Kotak SOAL (kiri) */}
         <div className="v1-content">
-          <h3 className="gh-title v1-question">{q.question}</h3>
+          <h3 className="gh-title v1-question">{q.questionT}</h3>
           {q.image && <img src={q.image} alt="Ilustrasi soal" className="v1-question-image" />}
+          <h3 className="gh-title v1-question">{q.question}</h3>
         </div>
 
         {/* Kartu PERNYATAAN (sumber drag) */}
