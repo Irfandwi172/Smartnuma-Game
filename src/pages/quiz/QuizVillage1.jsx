@@ -159,7 +159,7 @@ export default function QuizVillage1(props) {
   const remaining = pickCount - selectedOptions.length;
   const hint =
     remaining > 0
-      ? `Geser ${remaining} pernyataan yang sesuai ke kotak SESUAI.`
+      ? `Geser ${remaining} pernyataan yang sesuai ke kotak yang disediakan`
       : `Kotak SESUAI sudah berisi ${pickCount} pernyataan. Tekan Jawab!`;
 
   function renderZone(zone, label, badgeSrc) {
